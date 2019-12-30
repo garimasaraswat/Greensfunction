@@ -56,30 +56,39 @@ class init_material(object):
             G0=G0+np.kron((limG0*(1-mask)).ravel(),cnst.sigma0)
         return G0
 			
-    def gen_G0_all(self,E):
-	G0all=np.zeros((2*self.npix**2,2*self.npix**2),dtype=np.complex64)
-	s=0
-	for itip in range(self.npix):
+    def get_G0all(self,E):
+        G0all=np.zeros((2*self.npix**2,2*self.npix**2),dtype=np.complex64)
+        s=0
+        for itip in range(self.npix):
             for jtip in range(self.npix):
                 G0all[:,s:s+2]=(self.return_G0(E=E,x_tip=itip,y_tip=jtip).T)
-		s=s+2
-	return G0all
+                s=s+2
+        return G0all
 
     def get_Gnew(self,E):
-	G0all=self.gen_G0_all(E=E)
-	I0=np.identity(2*self.npix**2,dtype=np.complex)
-	G0V=np.einsum("ij,jj->ij",G0all,self.Vall)
-	Gnew=np.linalg.solve(I0-G0V,G0all)
-	return Gnew
+        G0all=self.get_G0all(E=E)
+        I0=np.identity(2*self.npix**2,dtype=np.complex)
+        G0V=np.einsum("ij,jj->ij",G0all,self.Vall)
+        Gnew=np.linalg.solve(I0-G0V,G0all)
+        return Gnew
 		
-    def get_ldos(self,E,loc=[]):
-	Gnew=self.get_Gnew(E=E)
-	LDOS=(-1./np.pi)*np.imag((np.diagonal(Gnew)[1::2] + np.diagonal(Gnew)[::2]).reshape(self.npix,self.npix))
-	if loc:
+    def get_ldos_Gnew(self,E,loc=[]):
+        G=self.get_Gnew(E=E)
+        LDOS=(-1./np.pi)*np.imag((np.diagonal(G)[1::2] + np.diagonal(G)[::2]).reshape(self.npix,self.npix))
+        if loc:
             x_tip=loc[0] ; y_tip=loc[1]
-	    return LDOS[x_tip,y_tip]
-	else:
-	    return LDOS
+            return LDOS[x_tip,y_tip]
+        else:
+            return LDOS
+
+    def get_ldos_G0(self,E,loc=[]):
+        G=self.get_G0all(E=E)
+        LDOS=(-1./np.pi)*np.imag((np.diagonal(G)[1::2] + np.diagonal(G)[::2]).reshape(self.npix,self.npix))
+        if loc:
+            x_tip=loc[0] ; y_tip=loc[1]
+            return LDOS[x_tip,y_tip]
+        else:
+            return LDOS
 
 
 

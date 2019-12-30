@@ -57,7 +57,7 @@ class init_material(object):
             G0=G0+np.kron((limG0*(1-mask)).ravel(),cnst.sigma0)
         return G0
 
-    def gen_G0_all(self,E=0.):
+    def get_G0all(self,E=0.):
         self.omega=E
         self.G0all=np.zeros((2*self.npix**2,2*self.npix**2),dtype=np.complex64)
         s=0
