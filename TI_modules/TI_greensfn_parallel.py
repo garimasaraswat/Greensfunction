@@ -36,11 +36,13 @@ class init_material(object):
         return x_tip,y_tip
     #######################################################
     #######################################################
-    def setup_potential(self,V0=1.5e-18,rad=2e-9,po_type="circ",edgewid=0.05,smwid=0.0,img=[],img_thr=0.5):
+    def setup_potential(self,V0=1.5,rad=2e-9,po_type="circ",edgewid=0.05,smwid=0.0,img=[],img_thr=0.5):
         '''po_type="circ","circisland",hex","hexisland","image"
            edgewid= percentage of radius for width of circumference
+           V0= potential height in eV
         '''
         self.V=np.zeros((self.npix,self.npix),dtype=np.complex)
+        V0=V0*(self.pixwid**2.)
         #############
         if po_type=="circ":
             for i in range(self.npix):
@@ -216,6 +218,7 @@ class init_material(object):
         else:
             G=self.get_Gnew(E=E)
         LDOS=(-1./np.pi)*np.imag((np.diagonal(G)[1::2] + np.diagonal(G)[::2]).reshape(self.npix,self.npix))
+        LDOS=LDOS*(self.pixwid**2.)
         if loc:
             x_tip=loc[0] ; y_tip=loc[1]
             return LDOS[x_tip,y_tip]
@@ -227,6 +230,7 @@ class init_material(object):
     def get_ldos_G0(self,E,loc=[]):
         G=self.get_G0all(E=E)
         LDOS=(-1./np.pi)*np.imag((np.diagonal(G)[1::2] + np.diagonal(G)[::2]).reshape(self.npix,self.npix))
+        LDOS=LDOS*(self.pixwid**2.)
         if loc:
             x_tip=loc[0] ; y_tip=loc[1]
             return LDOS[x_tip,y_tip]
