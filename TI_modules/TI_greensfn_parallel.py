@@ -41,7 +41,7 @@ class init_material(object):
            edgewid= percentage of radius for width of circumference
         '''
         self.V=np.zeros((self.npix,self.npix),dtype=np.complex)
-	V0=V0*(self.pixwid**2.)
+        V0=V0*(self.pixwid**2.)
         #############
         if po_type=="circ":
             for i in range(self.npix):
