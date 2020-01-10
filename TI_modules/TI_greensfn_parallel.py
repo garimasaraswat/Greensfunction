@@ -36,11 +36,12 @@ class init_material(object):
         return x_tip,y_tip
     #######################################################
     #######################################################
-    def setup_potential(self,V0=1.5e-18,rad=2e-9,po_type="circ",edgewid=0.05,smwid=0.0,img=[],img_thr=0.5):
+    def setup_potential(self,V0=1.5,rad=2e-9,po_type="circ",edgewid=0.05,smwid=0.0,img=[],img_thr=0.5):
         '''po_type="circ","circisland",hex","hexisland","image"
            edgewid= percentage of radius for width of circumference
         '''
         self.V=np.zeros((self.npix,self.npix),dtype=np.complex)
+	V0=V0*(self.pixwid**2.)
         #############
         if po_type=="circ":
             for i in range(self.npix):
