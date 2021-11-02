@@ -1,3 +1,3 @@
 # Greensfunction
 
-Put description here
+Details are presented in the pdf file
